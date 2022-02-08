@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'model/item.dart';
-import 'model/shopping_cart.dart';
+import '../model/item.dart';
+import 'my_app.dart';
 
-class CartListWidget extends StatefulWidget {
-  final ShoppingCart cart;
-
-  CartListWidget({required this.cart});
-
+class CartListWidget extends ConsumerWidget {
   @override
-  State<StatefulWidget> createState() {
-    return _CartListWidgetState();
-  }
-}
-
-class _CartListWidgetState extends State<CartListWidget> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     var items = <Widget>[];
 
-    widget.cart.items.forEach((c) {
+    final cart = ref.watch(cartStateProvider);
+    cart.items.forEach((c) {
       items.add(_CartListItemWidget(
         item: c,
       ));
@@ -46,7 +37,8 @@ class _CartListWidgetState extends State<CartListWidget> {
                   right: 0,
                   height: 64,
                   child: _CartListSummaryFooterWidget(
-                    totalPrice: widget.cart.totalPrice.toString(),
+                    totalPrice:
+                        ref.watch(cartStateProvider.notifier).getTotalPrice,
                   ),
                 )
               ],

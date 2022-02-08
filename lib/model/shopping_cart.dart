@@ -27,11 +27,7 @@ class ShoppingCart {
   }
 
   void add(Item item) {
-    if (items.isEmpty) {
-      items.add(item);
-      return;
-    }
-    if (!isExists(item)) {
+    if (items.isEmpty || !isExists(item)) {
       items.add(item);
     }
   }

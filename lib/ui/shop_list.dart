@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../model/item.dart';
 import 'cart_list.dart';
-import 'model/item.dart';
-import 'model/shopping_cart.dart';
+import 'my_app.dart';
 
-class ShopListWidget extends StatefulWidget {
+class ShopListWidget extends ConsumerWidget {
   @override
-  State<StatefulWidget> createState() {
-    return _ShopListState();
-  }
-}
-
-class _ShopListState extends State<ShopListWidget> {
-  ShoppingCart cart = ShoppingCart();
-  final List<Item> items = Item.dummyItems;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final shop_items = Item.dummyItems;
+    final cart = ref.watch(cartStateProvider);
+    final provider = ref.watch(cartStateProvider.notifier);
     final columnCount =
         MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 4;
 
@@ -24,14 +18,14 @@ class _ShopListState extends State<ShopListWidget> {
     const height = 400;
 
     var items = <Widget>[];
-    for (var x = 0; x < this.items.length; x++) {
+    for (var x = 0; x < shop_items.length; x++) {
       bool isSideLine;
       if (columnCount == 2) {
         isSideLine = x % 2 == 0;
       } else {
         isSideLine = x % 4 != 3;
       }
-      final item = this.items[x];
+      final item = shop_items[x];
 
       items.add(_ShopListItem(
         item: item,
@@ -40,17 +34,16 @@ class _ShopListState extends State<ShopListWidget> {
         onTap: (item) {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           if (cart.isExists(item)) {
-            cart.remove(item);
+            provider.removeFromCart(item);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('Item is removed from cart!'),
             ));
           } else {
-            cart.add(item);
+            provider.addToCart(item);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('Item is added to cart!'),
             ));
           }
-          setState(() {});
         },
       ));
     }
@@ -70,9 +63,7 @@ class _ShopListState extends State<ShopListWidget> {
             : FloatingActionButton.extended(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CartListWidget(
-                            cart: cart,
-                          )));
+                      builder: (context) => CartListWidget()));
                 },
                 icon: Icon(Icons.shopping_cart),
                 label: Text('${cart.numOfItems}'),
