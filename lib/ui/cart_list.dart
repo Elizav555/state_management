@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/src/provider.dart';
 
-import 'model/item.dart';
-import 'model/shopping_cart.dart';
+import '../model/item.dart';
+import '../notifiers/cart_notifier.dart';
 
-class CartListWidget extends StatefulWidget {
-  final ShoppingCart cart;
-
-  CartListWidget({required this.cart});
-
-  @override
-  State<StatefulWidget> createState() {
-    return _CartListWidgetState();
-  }
-}
-
-class _CartListWidgetState extends State<CartListWidget> {
+class CartListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var items = <Widget>[];
 
-    widget.cart.items.forEach((c) {
+    final cart = context.watch<CartState>().cart;
+    cart.items.forEach((c) {
       items.add(_CartListItemWidget(
         item: c,
       ));
@@ -46,7 +38,7 @@ class _CartListWidgetState extends State<CartListWidget> {
                   right: 0,
                   height: 64,
                   child: _CartListSummaryFooterWidget(
-                    totalPrice: widget.cart.totalPrice.toString(),
+                    totalPrice: context.read<CartState>().getTotalPrice,
                   ),
                 )
               ],
