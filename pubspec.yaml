@@ -19,6 +19,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=2.0.0"
 
 # Dependencies specify other modules that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -34,7 +35,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   uuid:
   pedantic: ^1.9.0
-  flutter_riverpod:
+  flutter_hooks: ^0.18.0
+  hooks_riverpod: ^2.0.0-dev.9
 dev_dependencies:
   flutter_test:
     sdk: flutter
