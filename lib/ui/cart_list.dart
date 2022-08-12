@@ -1,72 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture/model/shopping_cart.dart';
 
-import '../bloc/cart_bloc.dart';
 import '../model/item.dart';
 
-class CartListWidget extends StatefulWidget {
-  const CartListWidget(Key? key) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => CartListState();
-}
-
-class CartListState extends State<CartListWidget> {
-  late final CartBloc bloc;
-
-  @override
-  void initState() {
-    super.initState();
-    bloc = CartBloc();
-  }
-
-  @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
-  }
+class CartListWidget extends StatelessWidget {
+  const CartListWidget({Key? key, required this.cart}) : super(key: key);
+  final ShoppingCart cart;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ShoppingCart>(
-        stream: bloc.cartState,
-        builder: (context, snapshot) {
-          var items = <Widget>[];
+    var items = <Widget>[];
 
-          final cart = snapshot.data;
-          cart?.items.forEach((c) {
-            items.add(_CartListItemWidget(
-              item: c,
-            ));
-            items.add(Padding(
-              padding: EdgeInsets.only(top: 8.0),
-            ));
-          });
+    cart.items.forEach((c) {
+      items.add(_CartListItemWidget(
+        item: c,
+      ));
+      items.add(Padding(
+        padding: EdgeInsets.only(top: 8.0),
+      ));
+    });
 
-          return Scaffold(
-              appBar: AppBar(
-                title: Text('My Cart'),
-              ),
-              body: Container(
-                  decoration: BoxDecoration(color: Color(0xfff0eff4)),
-                  child: Stack(
-                    children: <Widget>[
-                      ListView(
-                        padding: EdgeInsets.only(bottom: 64),
-                        children: items,
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: 64,
-                        child: _CartListSummaryFooterWidget(
-                          totalPrice: cart?.totalPrice.toString() ?? '0',
-                        ),
-                      )
-                    ],
-                  )));
-        });
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('My Cart'),
+        ),
+        body: Container(
+            decoration: BoxDecoration(color: Color(0xfff0eff4)),
+            child: Stack(
+              children: <Widget>[
+                ListView(
+                  padding: EdgeInsets.only(bottom: 64),
+                  children: items,
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: 64,
+                  child: _CartListSummaryFooterWidget(
+                    totalPrice: cart.totalPrice.toString(),
+                  ),
+                )
+              ],
+            )));
   }
 }
 

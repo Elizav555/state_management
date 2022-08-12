@@ -87,7 +87,9 @@ class ShopListState extends State<ShopListWidget> {
                   ? FloatingActionButton.extended(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CartListWidget(null)));
+                            builder: (context) => CartListWidget(
+                                  cart: cart ?? ShoppingCart(),
+                                )));
                       },
                       icon: Icon(Icons.shopping_cart),
                       label: Text('${cart?.numOfItems}'),
