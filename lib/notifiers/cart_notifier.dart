@@ -9,10 +9,16 @@ class CartState extends StateNotifier<ShoppingCart> {
   String get getTotalPrice => state.totalPrice.toString();
 
   void addToCart(Item item) {
-    state.add(item);
+    var newState = ShoppingCart();
+    newState.items = state.items;
+    newState.add(item);
+    state = newState;
   }
 
   void removeFromCart(Item item) {
-    state.remove(item);
+    var newState = ShoppingCart();
+    newState.items = state.items;
+    newState.remove(item);
+    state = newState;
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'shop_list.dart';
 
-final StateNotifierProvider<CartState, ShoppingCart> cartStateProvider =
+final cartStateProvider =
     StateNotifierProvider<CartState, ShoppingCart>((_) => CartState());
 
 class MyApp extends StatelessWidget {
