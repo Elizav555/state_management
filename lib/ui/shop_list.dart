@@ -59,12 +59,12 @@ class ShopListState extends State<ShopListWidget> {
               onTap: (item) {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 if (cart?.isExists(item) == true) {
-                  bloc.action.add(RemoveFromCartEvent(item: item));
+                  bloc.removeFromCart(item);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Item is removed from cart!'),
                   ));
                 } else {
-                  bloc.action.add(AddToCartEvent(item: item));
+                  bloc.addToCart(item);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Item is added to cart!'),
                   ));
