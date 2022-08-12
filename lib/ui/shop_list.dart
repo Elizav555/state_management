@@ -10,7 +10,6 @@ class ShopListWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shop_items = Item.dummyItems;
     final cart = ref.watch(cartStateProvider);
-    final provider = ref.watch(cartStateProvider.notifier);
     final columnCount =
         MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 4;
 
@@ -34,12 +33,12 @@ class ShopListWidget extends ConsumerWidget {
         onTap: (item) {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           if (cart.isExists(item)) {
-            provider.removeFromCart(item);
+            ref.read(cartStateProvider.notifier).removeFromCart(item);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('Item is removed from cart!'),
             ));
           } else {
-            provider.addToCart(item);
+            ref.read(cartStateProvider.notifier).addToCart(item);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('Item is added to cart!'),
             ));
