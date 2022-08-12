@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../model/item.dart';
 import 'cart_list.dart';
 import 'my_app.dart';
 
-class ShopListWidget extends ConsumerWidget {
+class ShopListWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final shop_items = Item.dummyItems;
