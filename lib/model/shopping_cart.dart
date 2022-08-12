@@ -1,10 +1,13 @@
-import 'package:uuid/uuid.dart';
-
 import 'item.dart';
 
 class ShoppingCart {
-  final orderId = Uuid().v4();
-  List<Item> items = [];
+  const ShoppingCart({
+    this.items = const [],
+  });
+
+  factory ShoppingCart.initial() => const ShoppingCart();
+
+  final List<Item> items;
 
   bool get isEmpty => items.isEmpty;
 
@@ -40,17 +43,10 @@ class ShoppingCart {
     }
   }
 
-  Map<String, dynamic> get toMap {
-    final List<Map<String, dynamic>> items = this
-        .items
-        .map((i) => {
-              'id': i.id,
-              'name': i.name,
-              'description': i.description,
-              'price': i.price,
-              'imageUrl': i.imageUrl
-            })
-        .toList();
-    return {'orderId': orderId, 'items': items, 'total': totalPrice};
-  }
+  ShoppingCart copyWith({
+    List<Item>? items,
+  }) =>
+      ShoppingCart(
+        items: items ?? this.items,
+      );
 }

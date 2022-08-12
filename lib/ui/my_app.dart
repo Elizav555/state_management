@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture/notifiers/cart_notifier.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_architecture/model/shopping_cart.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
 import 'shop_list.dart';
 
 class MyApp extends StatelessWidget {
+  final Store<ShoppingCart> store;
+
+  MyApp({
+    Key? key,
+    required this.store,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CartState>(
-        create: (_) => CartState(),
+    return StoreProvider<ShoppingCart>(
+        store: store,
         child: MaterialApp(
           title: 'Shop',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: ShopListWidget(),
+          home: ShopListWidget(null),
         ));
   }
 }

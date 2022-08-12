@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:provider/src/provider.dart';
+import 'package:flutter_architecture/model/shopping_cart.dart';
 
 import '../model/item.dart';
-import '../notifiers/cart_notifier.dart';
 
 class CartListWidget extends StatelessWidget {
+  const CartListWidget({Key? key, required this.cart}) : super(key: key);
+  final ShoppingCart cart;
+
   @override
   Widget build(BuildContext context) {
     var items = <Widget>[];
 
-    final cart = context.watch<CartState>().cart;
     cart.items.forEach((c) {
       items.add(_CartListItemWidget(
         item: c,
@@ -38,7 +38,7 @@ class CartListWidget extends StatelessWidget {
                   right: 0,
                   height: 64,
                   child: _CartListSummaryFooterWidget(
-                    totalPrice: context.read<CartState>().getTotalPrice,
+                    totalPrice: cart.totalPrice.toString(),
                   ),
                 )
               ],

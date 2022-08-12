@@ -1,72 +1,83 @@
 import 'package:flutter/material.dart';
-import 'package:provider/src/provider.dart';
+import 'package:flutter_architecture/actions/cartActions.dart';
+import 'package:flutter_architecture/main.dart';
+import 'package:flutter_architecture/model/shopping_cart.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 import '../model/item.dart';
-import '../notifiers/cart_notifier.dart';
 import 'cart_list.dart';
 
 class ShopListWidget extends StatelessWidget {
+  const ShopListWidget(Key? key) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final shop_items = Item.dummyItems;
-    final cart = context.watch<CartState>().cart;
-    final columnCount =
-        MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 4;
+    return StoreConnector<ShoppingCart, ShoppingCart>(
+        converter: (store) => store.state,
+        builder: (context, cart) {
+          final shop_items = Item.dummyItems;
+          final columnCount =
+              MediaQuery.of(context).orientation == Orientation.portrait
+                  ? 2
+                  : 4;
 
-    final width = MediaQuery.of(context).size.width / columnCount;
-    const height = 400;
+          final width = MediaQuery.of(context).size.width / columnCount;
+          const height = 400;
 
-    var items = <Widget>[];
-    for (var x = 0; x < shop_items.length; x++) {
-      bool isSideLine;
-      if (columnCount == 2) {
-        isSideLine = x % 2 == 0;
-      } else {
-        isSideLine = x % 4 != 3;
-      }
-      final item = shop_items[x];
+          var items = <Widget>[];
+          for (var x = 0; x < shop_items.length; x++) {
+            bool isSideLine;
+            if (columnCount == 2) {
+              isSideLine = x % 2 == 0;
+            } else {
+              isSideLine = x % 4 != 3;
+            }
+            final item = shop_items[x];
 
-      items.add(_ShopListItem(
-        item: item,
-        isInCart: cart.isExists(item),
-        isSideLine: isSideLine,
-        onTap: (item) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          if (cart.isExists(item)) {
-            context.read<CartState>().removeFromCart(item);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Item is removed from cart!'),
-            ));
-          } else {
-            context.read<CartState>().addToCart(item);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Item is added to cart!'),
+            items.add(_ShopListItem(
+              item: item,
+              isInCart: cart.isExists(item),
+              isSideLine: isSideLine,
+              onTap: (item) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                if (cart.isExists(item)) {
+                  store.dispatch(RemoveFromCartAction(item: item));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Item is removed from cart!'),
+                  ));
+                } else {
+                  store.dispatch(AddToCartAction(item: item));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Item is added to cart!'),
+                  ));
+                }
+              },
             ));
           }
-        },
-      ));
-    }
 
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Store'),
-        ),
-        body: GridView.count(
-          childAspectRatio: width / height,
-          scrollDirection: Axis.vertical,
-          crossAxisCount: columnCount,
-          children: items,
-        ),
-        floatingActionButton: cart.isEmpty
-            ? null
-            : FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CartListWidget()));
-                },
-                icon: Icon(Icons.shopping_cart),
-                label: Text('${cart.numOfItems}'),
-              ));
+          return Scaffold(
+              appBar: AppBar(
+                title: Text('Store'),
+              ),
+              body: GridView.count(
+                childAspectRatio: width / height,
+                scrollDirection: Axis.vertical,
+                crossAxisCount: columnCount,
+                children: items,
+              ),
+              floatingActionButton: !cart.isEmpty
+                  ? FloatingActionButton.extended(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CartListWidget(
+                                  cart: cart,
+                                )));
+                      },
+                      icon: Icon(Icons.shopping_cart),
+                      label: Text('${cart.numOfItems}'),
+                    )
+                  : null);
+        });
   }
 }
 
