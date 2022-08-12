@@ -1,57 +1,21 @@
-import 'dart:async';
-
 import 'package:flutter_architecture/model/item.dart';
 import 'package:flutter_architecture/model/shopping_cart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-abstract class CartEvent {}
-
-class AddToCartEvent extends CartEvent {
-  Item item;
-
-  AddToCartEvent({required this.item});
-}
-
-class RemoveFromCartEvent extends CartEvent {
-  Item item;
-
-  RemoveFromCartEvent({required this.item});
-}
-
-class CartBloc {
-  final _cartStateController = StreamController<ShoppingCart>();
-  final _eventController = StreamController<CartEvent>();
-
-  Stream<ShoppingCart> get cartState => _cartStateController.stream;
-
-  Sink<CartEvent> get action => _eventController.sink;
-
-  CartBloc() {
-    _eventController.stream.listen(handleEvent);
-  }
-
-  void handleEvent(CartEvent event) {
-    if (event is AddToCartEvent) {
-      addToCart(event.item);
-    } else if (event is RemoveFromCartEvent) {
-      removeFromCart(event.item);
-    }
-    _cartStateController.add(cart);
-  }
-
-  ShoppingCart cart = ShoppingCart();
-
-  String get getTotalPrice => cart.totalPrice.toString();
+class CartBloc extends Cubit<ShoppingCart> {
+  CartBloc() : super(ShoppingCart());
 
   void addToCart(Item item) {
-    cart.add(item);
+    var newState = ShoppingCart();
+    newState.items = state.items;
+    newState.add(item);
+    emit(newState);
   }
 
   void removeFromCart(Item item) {
-    cart.remove(item);
-  }
-
-  void dispose() {
-    _cartStateController.close();
-    _eventController.close();
+    var newState = ShoppingCart();
+    newState.items = state.items;
+    newState.remove(item);
+    emit(newState);
   }
 }
