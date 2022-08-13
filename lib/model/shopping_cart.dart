@@ -32,20 +32,6 @@ class ShoppingCart {
     return indexOfItem >= 0;
   }
 
-  void add(Item item) {
-    if (items.isEmpty || !isExists(item)) {
-      items.add(item);
-    }
-  }
-
-  void remove(Item item) {
-    if (items.isEmpty) return;
-    final indexOfItem = items.indexWhere((i) => item.id == i.id);
-    if (indexOfItem >= 0) {
-      items.removeAt(indexOfItem);
-    }
-  }
-
   ShoppingCart copyWith({
     List<Item>? items,
   }) =>
