@@ -3,7 +3,7 @@ import 'package:flutter_architecture/actions/cartActions.dart';
 import 'package:flutter_architecture/model/shopping_cart.dart';
 
 ShoppingCartState cartStateReducer(ShoppingCartState state, action) {
-  switch (action) {
+  switch (action.type) {
     case Actions.addToCart:
       return _addToCart(state, action);
     case Actions.removeFromCart:
