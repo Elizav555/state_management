@@ -38,12 +38,12 @@ class ShopListWidget extends StatelessWidget {
             onTap: (item) {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               if (state.isExists(item)) {
-                context.read<CartBloc>().removeFromCart(item);
+                context.read<CartBloc>().add(RemoveFromCartEvent(item: item));
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('Item is removed from cart!'),
                 ));
               } else {
-                context.read<CartBloc>().addToCart(item);
+                context.read<CartBloc>().add(AddToCartEvent(item: item));
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('Item is added to cart!'),
                 ));

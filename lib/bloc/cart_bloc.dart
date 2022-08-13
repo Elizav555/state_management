@@ -2,20 +2,37 @@ import 'package:flutter_architecture/model/item.dart';
 import 'package:flutter_architecture/model/shopping_cart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CartBloc extends Cubit<ShoppingCart> {
-  CartBloc() : super(ShoppingCart());
+abstract class CartEvent {}
 
-  void addToCart(Item item) {
+class AddToCartEvent extends CartEvent {
+  Item item;
+
+  AddToCartEvent({required this.item});
+}
+
+class RemoveFromCartEvent extends CartEvent {
+  Item item;
+
+  RemoveFromCartEvent({required this.item});
+}
+
+class CartBloc extends Bloc<CartEvent, ShoppingCart> {
+  CartBloc() : super(ShoppingCart()) {
+    on<AddToCartEvent>(addToCart);
+    on<RemoveFromCartEvent>(removeFromCart);
+  }
+
+  void addToCart(AddToCartEvent event, Emitter<ShoppingCart> emit) {
     var newState = ShoppingCart();
     newState.items = state.items;
-    newState.add(item);
+    newState.add(event.item);
     emit(newState);
   }
 
-  void removeFromCart(Item item) {
+  void removeFromCart(RemoveFromCartEvent event, Emitter<ShoppingCart> emit) {
     var newState = ShoppingCart();
     newState.items = state.items;
-    newState.remove(item);
+    newState.remove(event.item);
     emit(newState);
   }
 }
