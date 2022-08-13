@@ -1,24 +1,24 @@
+import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter_architecture/actions/cartActions.dart';
 import 'package:flutter_architecture/model/shopping_cart.dart';
-import 'package:redux/redux.dart';
 
-import '../model/item.dart';
-
-ShoppingCart cartReducer(ShoppingCart state, action) {
-  return state.copyWith(
-    items: _itemsReducer(state.items, action),
-  );
+ShoppingCartState cartStateReducer(ShoppingCartState state, action) {
+  switch (action) {
+    case Actions.addToCart:
+      return _addToCart(state, action);
+    case Actions.removeFromCart:
+      return _removeFromCart(state, action);
+    default:
+      return state;
+  }
 }
 
-final _itemsReducer = combineReducers<List<Item>>({
-  TypedReducer<List<Item>, AddToCartAction>(_addToCart),
-  TypedReducer<List<Item>, RemoveFromCartAction>(_removeFromCart)
-});
-
-List<Item> _addToCart(List<Item> items, AddToCartAction action) {
-  return List.from(items)..add(action.item);
+ShoppingCartState _addToCart(ShoppingCartState state, Action action) {
+  state.add(action.payload);
+  return state.clone();
 }
 
-List<Item> _removeFromCart(List<Item> items, RemoveFromCartAction action) {
-  return items.where((it) => it.id != action.item.id).toList();
+ShoppingCartState _removeFromCart(ShoppingCartState state, Action action) {
+  state.remove(action.payload);
+  return state.clone();
 }

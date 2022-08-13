@@ -1,13 +1,13 @@
+import 'package:fish_redux/fish_redux.dart';
+
 import '../model/item.dart';
 
-class AddToCartAction {
-  AddToCartAction({required this.item});
+enum Actions { addToCart, removeFromCart }
 
-  Item item;
-}
+class ActionsCreate {
+  static Action addToCart(Item item) =>
+      Action(Actions.addToCart, payload: item);
 
-class RemoveFromCartAction {
-  RemoveFromCartAction({required this.item});
-
-  Item item;
+  static Action removeFromCart(Item item) =>
+      Action(Actions.removeFromCart, payload: item);
 }

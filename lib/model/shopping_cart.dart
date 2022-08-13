@@ -1,16 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:fish_redux/fish_redux.dart';
 
 import 'item.dart';
 
-@immutable
-class ShoppingCart {
-  const ShoppingCart({
-    this.items = const [],
-  });
+class ShoppingCartState implements Cloneable<ShoppingCartState> {
+  List<Item> items = [];
 
-  factory ShoppingCart.initial() => const ShoppingCart();
-
-  final List<Item> items;
+  static ShoppingCartState initState(dynamic params) {
+    return ShoppingCartState()..items = [];
+  }
 
   bool get isEmpty => items.isEmpty;
 
@@ -32,10 +29,22 @@ class ShoppingCart {
     return indexOfItem >= 0;
   }
 
-  ShoppingCart copyWith({
-    List<Item>? items,
-  }) =>
-      ShoppingCart(
-        items: items ?? this.items,
-      );
+  void add(Item item) {
+    if (items.isEmpty || !isExists(item)) {
+      items.add(item);
+    }
+  }
+
+  void remove(Item item) {
+    if (items.isEmpty) return;
+    final indexOfItem = items.indexWhere((i) => item.id == i.id);
+    if (indexOfItem >= 0) {
+      items.removeAt(indexOfItem);
+    }
+  }
+
+  @override
+  ShoppingCartState clone() {
+    return ShoppingCartState()..items = items;
+  }
 }

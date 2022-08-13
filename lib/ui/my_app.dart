@@ -1,34 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture/model/shopping_cart.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_architecture/ui/shop_list_page.dart';
 
-import 'shop_list.dart';
-
-class MyApp extends StatelessWidget {
-  final Store<ShoppingCart> store;
-
-  MyApp({
-    Key? key,
-    required this.store,
-  }) : super(key: key);
-
+class MyApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return StoreProvider<ShoppingCart>(
-        store: store,
-        child: MaterialApp(
-            title: 'Shop',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            home: StoreBuilder<ShoppingCart>(
-              builder: (BuildContext context, Store<ShoppingCart> store) =>
-                  ShopListWidget(
-                null,
-                store: store,
-              ),
-            )));
-  }
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+      title: 'Shop',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ShopListPage().buildPage(null));
 }
