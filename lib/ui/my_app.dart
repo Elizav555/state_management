@@ -18,12 +18,17 @@ class MyApp extends StatelessWidget {
     return StoreProvider<ShoppingCart>(
         store: store,
         child: MaterialApp(
-          title: 'Shop',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: ShopListWidget(null),
-        ));
+            title: 'Shop',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: StoreBuilder<ShoppingCart>(
+              builder: (BuildContext context, Store<ShoppingCart> store) =>
+                  ShopListWidget(
+                null,
+                store: store,
+              ),
+            )));
   }
 }

@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
+
 import 'item.dart';
 
+@immutable
 class ShoppingCart {
   const ShoppingCart({
     this.items = const [],
