@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture/notifiers/cart_notifier.dart';
+import 'package:flutter_architecture/model/shopping_cart.dart';
 import 'package:provider/provider.dart';
 
 import 'shop_list.dart';
@@ -7,8 +7,8 @@ import 'shop_list.dart';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CartState>(
-        create: (_) => CartState(),
+    return Provider(
+        create: (_) => ShoppingCart(),
         child: MaterialApp(
           title: 'Shop',
           debugShowCheckedModeBanner: false,

@@ -1,15 +1,22 @@
-import 'package:uuid/uuid.dart';
+import 'package:mobx/mobx.dart';
 
 import 'item.dart';
 
-class ShoppingCart {
-  final orderId = Uuid().v4();
+part 'shopping_cart.g.dart';
+
+class ShoppingCart = CartBase with _$ShoppingCart;
+
+abstract class CartBase with Store {
+  @observable
   List<Item> items = [];
 
+  @computed
   bool get isEmpty => items.isEmpty;
 
+  @computed
   int get numOfItems => items.length;
 
+  @computed
   int get totalPrice {
     var totalPrice = 0;
     items.forEach((i) {
@@ -18,6 +25,7 @@ class ShoppingCart {
     return totalPrice;
   }
 
+  @action
   bool isExists(item) {
     if (items.isEmpty) {
       return false;
@@ -26,31 +34,21 @@ class ShoppingCart {
     return indexOfItem >= 0;
   }
 
+  @action
   void add(Item item) {
     if (items.isEmpty || !isExists(item)) {
       items.add(item);
     }
+    items = List.of(items);
   }
 
+  @action
   void remove(Item item) {
     if (items.isEmpty) return;
     final indexOfItem = items.indexWhere((i) => item.id == i.id);
     if (indexOfItem >= 0) {
       items.removeAt(indexOfItem);
     }
-  }
-
-  Map<String, dynamic> get toMap {
-    final List<Map<String, dynamic>> items = this
-        .items
-        .map((i) => {
-              'id': i.id,
-              'name': i.name,
-              'description': i.description,
-              'price': i.price,
-              'imageUrl': i.imageUrl
-            })
-        .toList();
-    return {'orderId': orderId, 'items': items, 'total': totalPrice};
+    items = List.of(items);
   }
 }
